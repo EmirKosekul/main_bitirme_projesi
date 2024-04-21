@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Metin Seçme</title>
+    <style>
+
+    </style>
+    <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+    <script>
+        var metinAlaniMetni = "";
+
+        // function metniGoster() {
+        //     // Seçilen metni al
+        //     var secilenMetin = window.getSelection().toString();
+        //     metinAlaniMetni = document.getElementById("metinAlani").value;
+
+        //     // Seçilen metni diğer forma aktar
+        //     document.getElementById("gosterilenMetin").value = secilenMetin;
+        // }
+
+        // Sağ tıklandığında özel menüyü aç
+        window.addEventListener("contextmenu", function (event) {
+            var ozelMenu = document.getElementById("ozelMenu");
+            event.preventDefault();
+            ozelMenu.style.display = "block";
+            ozelMenu.style.left = event.pageX + "px";
+            ozelMenu.style.top = event.pageY + "px";
+        });
+
+        // Belge tıklanırsa özel menüyü kapat
+        document.addEventListener("click", function () {
+            document.getElementById("ozelMenu").style.display = "none";
+        });
+
+        // Menü öğelerine tıklama event listener'ları ekle
+        document.addEventListener("DOMContentLoaded", function () {
+            var menuItems = document.querySelectorAll("#ozelMenu li");
+            menuItems.forEach(function (item) {
+                item.addEventListener("click", function (event) {
+                    var action = event.target.getAttribute("data-action");
+                    if (action) {
+                        // İlgili işlevi çağır
+                        handleMenuAction(action);
+                    }
+                    // Menüyü kapat
+                    document.getElementById("ozelMenu").style.display = "none";
+                });
+            });
+        });
+
+        // Menü işlevlerini yöneten işlev
+        function handleMenuAction(action) {
+            switch (action) {
+                case "get_summary":
+                    // Get a Summary işlevi burada çağrılabilir
+                    document.querySelector("button[value='first_action']").click();
+                    break;
+                case "generate_question":
+                    // Generate a Question işlevi burada çağrılabilir
+                    document.querySelector("button[value='second_action']").click();
+                    break;
+                default:
+                    console.log("Bilinmeyen işlev: " + action);
+            }
+        }
+        
+    </script>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <h3>Kayıtlı Metinleriniz:</h3>
+    <ul>
+        {% for text in texts %}
+        <li><a href="#" onclick="showText('{{ text.content }}')">{{ text.name }}</a></li>
+        {% endfor %}
+    </ul>
+    <form action="/save_text" method="post">
+        <div class="mainTextDiv">
+            <input type="text" name="text_name" placeholder="Metin Adı" required>
+            <button type="submit">Kaydet</button>
+            <textarea class="mainTextArea" id="metinAlani" name="metinAlani" rows="4" cols="50">{{main_text}}</textarea>
+            <script>
+                CKEDITOR.replace('metinAlani', {
+                    on: {
+                        instanceReady: function (evt) {
+                            var editor = evt.editor;
+                            editor.addMenuGroup('customGroup');
+                            editor.addMenuItem('customItem',
+                                {
+                                    label: 'Get Summary',
+                                    command: 'getSummary',
+                                    group: 'customGroup',
+                                }
+                            );
+                            editor.addMenuItem('customItem2',
+                                {
+                                    label: 'Get Question',
+                                    command: 'getQuestion',
+                                    group: 'customGroup',
+                                }
+                            );
+                            editor.addMenuItem('customItem3', {
+                                label: 'Translate',
+                                command: 'translateCommand',
+                                group: 'customGroup',
+                                getItems: function () {
+                                    var items = {};
+                                    items['translateOption1'] = {
+                                        label: 'Option 1',
+                                        command: 'translateOption1Command'
+                                    };
+                                    items['translateOption2'] = {
+                                        label: 'Option 2',
+                                        command: 'translateOption2Command'
+                                    };
+                                    return items;
+                                }
+                            });
+                            editor.addCommand('getSummary', {
+                                exec: function (editor) {
+                                    document.querySelector("button[value='first_action']").click();
+                                }
+                            });
+                            editor.addCommand('getQuestion', {
+                                exec: function (editor) {
+                                    document.querySelector("button[value='second_action']").click();
+                                }
+                            });
+                            editor.addCommand('translateCommand', {
+                                exec: function (editor) {
+                                    console.log('Translate command executed');
+                                }
+                            });
+                            editor.addCommand('translateOption1Command', {
+                                exec: function (editor) {
+                                    console.log('Translate Option 1 command executed');
+                                }
+                            });
+                            editor.addCommand('translateOption2Command', {
+                                exec: function (editor) {
+                                    console.log('Translate Option 2 command executed');
+                                }
+                            });
+
+                            editor.contextMenu.addListener(function (element) {
+                                var items = {};
+                                items['customItem'] = CKEDITOR.TRISTATE_OFF;
+                                items['customItem2'] = CKEDITOR.TRISTATE_OFF;
+                                items['customItem3'] = CKEDITOR.TRISTATE_OFF;
+                                return items;
+                            });
+                        }
+                    }
+                });
+
+                function showSelectedText() {
+                    var editor = CKEDITOR.instances.metinAlani;
+                    var selectedText = editor.getSelection().getSelectedText();
+                    document.getElementById('gosterilenMetin').value = selectedText;
+                }
+
+                CKEDITOR.instances.metinAlani.on('contentDom', function () {
+                    this.document.on('selectionchange', showSelectedText);
+                });
+            </script>
+
+        </div>
+        <div class="spaceDiv"></div>
+        <div class="selectedTextDiv">
+            <!-- <label for="gosterilenMetin">Seçilen Metin:</label> -->
+            <!-- <input type="text" id="gosterilenMetinn" name="gosterilenMetinn" value="{{ selected_text }}"> -->
+            <textarea class="selectedTextArea" type="text" id="gosterilenMetin" name="gosterilenMetin"
+                value="{{ selected_text }}">{{ selected_text }}</textarea>
+            <button type="submit" name="action" value="first_action">Get a Summary</button>
+            <button type="submit" name="action" value="second_action">Generate a Question</button>
+            <label class="headerLabel">{{header}}</label>
+            <textarea class="answerTextArea">{{ result }}</textarea>
+        </div>
+    </form>
+
+    <a href="/logout">Çıkış Yap</a>
+
+    <!-- Özel menü -->
+    <div id="ozelMenu">
+        <ul>
+            <li data-action="get_summary">Get Summary</li>
+            <li data-action="generate_question">Generate Question</li>
+        </ul>
+    </div>
+    <script>
+        function showText(text) {
+            console.log("Gelen veri:", text);
+            // CKEditor API'sini kullanarak metni textarea alanına aktar
+            CKEDITOR.instances['metinAlani'].setData(text);
+        }
+
+    </script>
+</body>
+
+</html>
