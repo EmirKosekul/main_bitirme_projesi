@@ -9,77 +9,41 @@
     <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
     <script>
         var metinAlaniMetni = "";
-
-        // function metniGoster() {
-        //     // Seçilen metni al
-        //     var secilenMetin = window.getSelection().toString();
-        //     metinAlaniMetni = document.getElementById("metinAlani").value;
-
-        //     // Seçilen metni diğer forma aktar
-        //     document.getElementById("gosterilenMetin").value = secilenMetin;
-        // }
-
-        // Sağ tıklandığında özel menüyü aç
-        window.addEventListener("contextmenu", function (event) {
-            var ozelMenu = document.getElementById("ozelMenu");
-            event.preventDefault();
-            ozelMenu.style.display = "block";
-            ozelMenu.style.left = event.pageX + "px";
-            ozelMenu.style.top = event.pageY + "px";
-        });
-
-        // Belge tıklanırsa özel menüyü kapat
-        document.addEventListener("click", function () {
-            document.getElementById("ozelMenu").style.display = "none";
-        });
-
-        // Menü öğelerine tıklama event listener'ları ekle
-        document.addEventListener("DOMContentLoaded", function () {
-            var menuItems = document.querySelectorAll("#ozelMenu li");
-            menuItems.forEach(function (item) {
-                item.addEventListener("click", function (event) {
-                    var action = event.target.getAttribute("data-action");
-                    if (action) {
-                        // İlgili işlevi çağır
-                        handleMenuAction(action);
+        /* Dropdownu açma fonksiyonu */
+        function myFunction() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
+        /* Dışarı tıklandığında dropdownu kapatma */
+        window.onclick = function (event) {
+            if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
                     }
-                    // Menüyü kapat
-                    document.getElementById("ozelMenu").style.display = "none";
-                });
-            });
-        });
-
-        // Menü işlevlerini yöneten işlev
-        function handleMenuAction(action) {
-            switch (action) {
-                case "get_summary":
-                    // Get a Summary işlevi burada çağrılabilir
-                    document.querySelector("button[value='first_action']").click();
-                    break;
-                case "generate_question":
-                    // Generate a Question işlevi burada çağrılabilir
-                    document.querySelector("button[value='second_action']").click();
-                    break;
-                default:
-                    console.log("Bilinmeyen işlev: " + action);
+                }
             }
         }
-        
     </script>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 
 <body>
-    <h3>Kayıtlı Metinleriniz:</h3>
-    <ul>
-        {% for text in texts %}
-        <li><a href="#" onclick="showText('{{ text.content }}')">{{ text.name }}</a></li>
-        {% endfor %}
-    </ul>
-    <form action="/save_text" method="post">
+    <div class="dropdown">
+        <button onclick="myFunction()" class="dropbtn">Kayıtlı Metinlerim</button>
+        <div id="myDropdown" class="dropdown-content">
+          {% for text in texts %}
+          <a href="#" onclick="showText('{{ text.content }}')">{{ text.name }}</a>
+          {% endfor %}
+        </div>
+      </div>
+
+    <form method="post">
         <div class="mainTextDiv">
-            <input type="text" name="text_name" placeholder="Metin Adı" required>
-            <button type="submit">Kaydet</button>
+            <input type="text" name="text_name" placeholder="Metin Adı">
+            <button type="submit" name="action" value="kayit">Kaydet</button>
             <textarea class="mainTextArea" id="metinAlani" name="metinAlani" rows="4" cols="50">{{main_text}}</textarea>
             <script>
                 CKEDITOR.replace('metinAlani', {
@@ -98,6 +62,41 @@
                                 {
                                     label: 'Get Question',
                                     command: 'getQuestion',
+                                    group: 'customGroup',
+                                }
+                            );
+                            editor.addMenuItem('customItem4',
+                                {
+                                    label: 'Get a Title',
+                                    command: 'getTitle',
+                                    group: 'customGroup',
+                                }
+                            );
+                            editor.addMenuItem('customItem5',
+                                {
+                                    label: 'Spelling Correction',
+                                    command: 'spellingCorrection',
+                                    group: 'customGroup',
+                                }
+                            );
+                            editor.addMenuItem('customItem6',
+                                {
+                                    label: 'Key Word Extraction',
+                                    command: 'keyWord',
+                                    group: 'customGroup',
+                                }
+                            );
+                            editor.addMenuItem('customItem7',
+                                {
+                                    label: 'Paraphrase',
+                                    command: 'paraphrase',
+                                    group: 'customGroup',
+                                }
+                            );
+                            editor.addMenuItem('customItem8',
+                                {
+                                    label: 'Grammar Correction',
+                                    command: 'grammarCorrection',
                                     group: 'customGroup',
                                 }
                             );
@@ -128,6 +127,31 @@
                                     document.querySelector("button[value='second_action']").click();
                                 }
                             });
+                            editor.addCommand('getTitle', {
+                                exec: function (editor) {
+                                    document.querySelector("button[value='third_action']").click();
+                                }
+                            });
+                            editor.addCommand('spellingCorrection', {
+                                exec: function (editor) {
+                                    document.querySelector("button[value='fourth_action']").click();
+                                }
+                            });
+                            editor.addCommand('keyWord', {
+                                exec: function (editor) {
+                                    document.querySelector("button[value='fifth_action']").click();
+                                }
+                            });
+                            editor.addCommand('paraphrase', {
+                                exec: function (editor) {
+                                    document.querySelector("button[value='sixth_action']").click();
+                                }
+                            });
+                            editor.addCommand('grammarCorrection', {
+                                exec: function (editor) {
+                                    document.querySelector("button[value='seventh_action']").click();
+                                }
+                            });
                             editor.addCommand('translateCommand', {
                                 exec: function (editor) {
                                     console.log('Translate command executed');
@@ -149,6 +173,11 @@
                                 items['customItem'] = CKEDITOR.TRISTATE_OFF;
                                 items['customItem2'] = CKEDITOR.TRISTATE_OFF;
                                 items['customItem3'] = CKEDITOR.TRISTATE_OFF;
+                                items['customItem4'] = CKEDITOR.TRISTATE_OFF;
+                                items['customItem5'] = CKEDITOR.TRISTATE_OFF;
+                                items['customItem6'] = CKEDITOR.TRISTATE_OFF;
+                                items['customItem7'] = CKEDITOR.TRISTATE_OFF;
+                                items['customItem8'] = CKEDITOR.TRISTATE_OFF;
                                 return items;
                             });
                         }
@@ -161,9 +190,9 @@
                     document.getElementById('gosterilenMetin').value = selectedText;
                 }
 
-                CKEDITOR.instances.metinAlani.on('contentDom', function () {
-                    this.document.on('selectionchange', showSelectedText);
-                });
+                // Fonksiyonu mouseup olayına bağlayın
+                CKEDITOR.instances.metinAlani.on('selectionChange', showSelectedText);
+
             </script>
 
         </div>
@@ -173,8 +202,13 @@
             <!-- <input type="text" id="gosterilenMetinn" name="gosterilenMetinn" value="{{ selected_text }}"> -->
             <textarea class="selectedTextArea" type="text" id="gosterilenMetin" name="gosterilenMetin"
                 value="{{ selected_text }}">{{ selected_text }}</textarea>
-            <button type="submit" name="action" value="first_action">Get a Summary</button>
-            <button type="submit" name="action" value="second_action">Generate a Question</button>
+            <button class="actionButton" type="submit" name="action" value="first_action">Get a Summary</button>
+            <button class="actionButton" type="submit" name="action" value="second_action">Generate a Question</button>
+            <button class="actionButton" type="submit" name="action" value="third_action">Generate a Title</button>
+            <button class="actionButton" type="submit" name="action" value="fourth_action">Spelling Correction</button>
+            <button class="actionButton" type="submit" name="action" value="fifth_action">Key Word</button>
+            <button class="actionButton" type="submit" name="action" value="sixth_action">Paraphrase</button>
+            <button class="actionButton" type="submit" name="action" value="seventh_action">Grammar Correction</button>
             <label class="headerLabel">{{header}}</label>
             <textarea class="answerTextArea">{{ result }}</textarea>
         </div>
