@@ -41,17 +41,16 @@
                     <input type="hidden" name="text_name" value="{{ text.name }}">
                     <button type="submit" class="delete-button">Sil</button>
                 </form>
-                <button onclick="editText('{{ text.name }}')" class="edit-button">Düzenle</button>
+                <!-- <button onclick="editText('{{ text.name }}')" class="edit-button">Düzenle</button> -->
             </div>
             {% endfor %}
         </div>
     </div>
-    
+
     <button onclick="insertTextHere('Emir\'in Ayakkabıları')"> Aktar </button>
-    <form method="post">
+    <form method="post" onsubmit="return validateForm()">
         <div class="mainTextDiv">
             <input type="text" name="text_name" id="textName" placeholder="Metin Adı" value="{{text_name}}">
-            <input type="text" name="text_name_holder" id="textNameHolder" placeholder="Metin Adı" value="{{header}}">
             <button type="submit" name="action" value="kayit">Kaydet</button>
             <textarea class="mainTextArea" id="metinAlani" name="metinAlani" rows="4" cols="50">{{main_text}}</textarea>
             <script>
@@ -237,7 +236,7 @@
         function showText(textContent, textName) {
             console.log("Gelen veri:", textContent);
             // CKEditor API'sini kullanarak metni textarea alanına aktar
-            document.getElementById("textName").value=textName;
+            document.getElementById("textName").value = textName;
             CKEDITOR.instances['metinAlani'].setData(textContent);
         }
         function insertTextHere(text) {
@@ -247,10 +246,29 @@
             CKEDITOR.instances['metinAlani'].insertHtml("<p>" + resultValue + "</p>");
         }
         function editText(textName) {
-        // yapacam bir şeyler
-        document.getElementById("textName").value=textName;
-        CKEDITOR.instances['metinAlani'].setData(textName);
+            // yapacam bir şeyler
+            document.getElementById("textName").value = textName;
+            CKEDITOR.instances['metinAlani'].setData(textName);
         }
+        function validateForm() {
+            var action = document.activeElement.value; // Hangi düğmeye basıldığını al
+            if (action === "kayit") {
+                var textName = document.getElementById("textName").value;
+                var existingTextNames = Array.from(document.querySelectorAll(".text-item a")).map(a => a.innerText);
+                if (existingTextNames.includes(textName)) {
+                    // Eğer isim zaten varsa, kullanıcıya onay iletişim kutusu göster
+                    if (!confirm("Bu isimde bir metin zaten mevcut. Üzerine yazmak istiyor musunuz?")) {
+                        return false; // İptal edildiği durumda formun gönderilmesini engelle
+                    }
+                }
+            } else if (action === "düzenle") {
+                // Düzenleme düğmesine basıldığında, herhangi bir işlem yapmadan formun gönderilmesine izin ver
+                return true;
+            }
+            // Diğer düğmelere basıldığında doğrudan formun gönderilmesine izin ver
+            return true;
+        }
+
     </script>
 </body>
 

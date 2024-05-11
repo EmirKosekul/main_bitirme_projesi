@@ -108,8 +108,15 @@ def profile():
         user_text = re.sub(r">\s+<", '><', user_text)
         user_text = user_text.strip()
         text_name = request.form['text_name']
-        # Kullanıcı ile ilişkilendirilmiş metni veritabanına kaydet
-        users_collection.update_one({'username': username}, {'$push': {'texts': {'name': text_name, 'content': user_text}}})
+
+        existing_text = users_collection.find_one({'username': username, 'texts.name': text_name})
+        if existing_text:
+        # Eğer varsa, mevcut metni güncelleyelim
+         users_collection.update_one({'username': username, 'texts.name': text_name}, {'$set': {'texts.$.content': user_text}})
+        else:
+        # Eğer yoksa, yeni metni ekleyelim
+         users_collection.update_one({'username': username}, {'$push': {'texts': {'name': text_name, 'content': user_text}}})
+    
         return redirect(url_for('profile'))
      elif request.form['action'] == 'first_action':
          user = users_collection.find_one({'username': username})
