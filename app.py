@@ -75,6 +75,20 @@ def get_text(text_name):
     
     return 'Metin bulunamadı'
 
+@app.route('/delete_text', methods=['POST'])
+def delete_text():
+    if 'username' not in session:
+        return redirect(url_for('index'))
+
+    username = session['username']
+    text_name = request.form['text_name']
+
+    # Kullanıcının metni veritabanından silinmesi
+    users_collection.update_one({'username': username}, {'$pull': {'texts': {'name': text_name}}})
+
+    return redirect(url_for('profile'))
+
+
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
     if 'username' not in session:

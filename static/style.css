@@ -101,7 +101,7 @@ button[class='actionButton'] {
 }
 
 textarea[name='gosterilenMetin'] {
-    /* display:none; */
+    display:none;
     background-color: aqua;
 }
 
@@ -136,31 +136,35 @@ textarea[name='gosterilenMetin'] {
 .dropdown {
     position: relative;
     display: inline-block;
-  }
-  
-  /* Dropdown içeriği */
-  .dropdown-content {
+}
+
+/* Dropdown içeriği */
+.dropdown-content {
     display: none;
     position: absolute;
     background-color: #f9f9f9;
     min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
-  }
-  
-  /* Dropdown içeriği içindeki bağlantılar */
-  .dropdown-content a {
+}
+
+/* Dropdown içeriği içindeki bağlantılar */
+.dropdown-content a {
     color: black;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
-  }
-  
-  /* Bağlantı üzerine gelindiğinde */
-  .dropdown-content a:hover {background-color: #f1f1f1;}
-  
-  /* Dropdown açıldığında */
-  .show {display:block;}
+}
+
+/* Bağlantı üzerine gelindiğinde */
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+/* Dropdown açıldığında */
+.show {
+    display: block;
+}
 
 /* Dropdown düğmesi */
 .dropbtn {
@@ -172,10 +176,23 @@ textarea[name='gosterilenMetin'] {
     font-size: 16px;
     border-radius: 10px;
     cursor: pointer;
-  }
-  
-  /* Dropdown düğmesine gelindiğinde */
-  .dropbtn:hover {
+}
+
+/* Dropdown düğmesine gelindiğinde */
+.dropbtn:hover {
     background-color: #735d5d;
-  }
-    
+}
+
+.delete-form {
+    display: inline;
+    margin-left: 10px;
+}
+
+.delete-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}

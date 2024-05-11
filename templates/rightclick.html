@@ -35,10 +35,17 @@
         <button onclick="myFunction()" class="dropbtn">Kayıtlı Metinlerim</button>
         <div id="myDropdown" class="dropdown-content">
             {% for text in texts %}
-            <a href="#" onclick="showText('{{ text.content }}')">{{ text.name }}</a>
+            <div class="text-item">
+                <a href="#" onclick="showText('{{ text.content }}')">{{ text.name }}</a>
+                <form action="/delete_text" method="post" class="delete-form">
+                    <input type="hidden" name="text_name" value="{{ text.name }}">
+                    <button type="submit" class="delete-button">Sil</button>
+                </form>
+            </div>
             {% endfor %}
         </div>
     </div>
+    
     <button onclick="insertTextHere('Emir\'in Ayakkabıları')"> Aktar </button>
     <form method="post">
         <div class="mainTextDiv">
