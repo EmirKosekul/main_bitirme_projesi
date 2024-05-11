@@ -101,7 +101,7 @@ button[class='actionButton'] {
 }
 
 textarea[name='gosterilenMetin'] {
-    display:none;
+    display: none;
     background-color: aqua;
 }
 
@@ -205,3 +205,7 @@ textarea[name='gosterilenMetin'] {
     cursor: pointer;
     border-radius: 5px;
 } */
+
+.aktarBtn {
+    margin-left: 95%;
+}
