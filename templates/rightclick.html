@@ -34,12 +34,12 @@
     <div class="dropdown">
         <button onclick="myFunction()" class="dropbtn">Kayıtlı Metinlerim</button>
         <div id="myDropdown" class="dropdown-content">
-          {% for text in texts %}
-          <a href="#" onclick="showText('{{ text.content }}')">{{ text.name }}</a>
-          {% endfor %}
+            {% for text in texts %}
+            <a href="#" onclick="showText('{{ text.content }}')">{{ text.name }}</a>
+            {% endfor %}
         </div>
-      </div>
-
+    </div>
+    <button onclick="insertTextHere('Emir\'in Ayakkabıları')"> Aktar </button>
     <form method="post">
         <div class="mainTextDiv">
             <input type="text" name="text_name" placeholder="Metin Adı">
@@ -47,6 +47,7 @@
             <textarea class="mainTextArea" id="metinAlani" name="metinAlani" rows="4" cols="50">{{main_text}}</textarea>
             <script>
                 CKEDITOR.replace('metinAlani', {
+                    height: '500px',
                     on: {
                         instanceReady: function (evt) {
                             var editor = evt.editor;
@@ -210,7 +211,7 @@
             <button class="actionButton" type="submit" name="action" value="sixth_action">Paraphrase</button>
             <button class="actionButton" type="submit" name="action" value="seventh_action">Grammar Correction</button>
             <label class="headerLabel">{{header}}</label>
-            <textarea class="answerTextArea">{{ result }}</textarea>
+            <textarea class="answerTextArea" id="resultText">{{ result }}</textarea>
         </div>
     </form>
 
@@ -229,7 +230,12 @@
             // CKEditor API'sini kullanarak metni textarea alanına aktar
             CKEDITOR.instances['metinAlani'].setData(text);
         }
-
+        function insertTextHere(text) {
+            // console.log("Gelen veri:", text);
+            var resultValue = document.getElementById('resultText').value;
+            alert(resultValue);
+            CKEDITOR.instances['metinAlani'].insertHtml("<p>" + resultValue + "</p>");
+        }
     </script>
 </body>
 
