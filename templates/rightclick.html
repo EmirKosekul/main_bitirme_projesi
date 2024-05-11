@@ -36,11 +36,12 @@
         <div id="myDropdown" class="dropdown-content">
             {% for text in texts %}
             <div class="text-item">
-                <a href="#" onclick="showText('{{ text.content }}')">{{ text.name }}</a>
+                <a href="#" onclick="showText('{{ text.content }}', '{{ text.name }}')">{{ text.name }}</a>
                 <form action="/delete_text" method="post" class="delete-form">
                     <input type="hidden" name="text_name" value="{{ text.name }}">
                     <button type="submit" class="delete-button">Sil</button>
                 </form>
+                <button onclick="editText('{{ text.name }}')" class="edit-button">Düzenle</button>
             </div>
             {% endfor %}
         </div>
@@ -49,12 +50,13 @@
     <button onclick="insertTextHere('Emir\'in Ayakkabıları')"> Aktar </button>
     <form method="post">
         <div class="mainTextDiv">
-            <input type="text" name="text_name" placeholder="Metin Adı">
+            <input type="text" name="text_name" id="textName" placeholder="Metin Adı" value="{{text_name}}">
+            <input type="text" name="text_name_holder" id="textNameHolder" placeholder="Metin Adı" value="{{header}}">
             <button type="submit" name="action" value="kayit">Kaydet</button>
             <textarea class="mainTextArea" id="metinAlani" name="metinAlani" rows="4" cols="50">{{main_text}}</textarea>
             <script>
                 CKEDITOR.replace('metinAlani', {
-                    height: '500px',
+                    height: '450px',
                     on: {
                         instanceReady: function (evt) {
                             var editor = evt.editor;
@@ -232,16 +234,22 @@
         </ul>
     </div>
     <script>
-        function showText(text) {
-            console.log("Gelen veri:", text);
+        function showText(textContent, textName) {
+            console.log("Gelen veri:", textContent);
             // CKEditor API'sini kullanarak metni textarea alanına aktar
-            CKEDITOR.instances['metinAlani'].setData(text);
+            document.getElementById("textName").value=textName;
+            CKEDITOR.instances['metinAlani'].setData(textContent);
         }
         function insertTextHere(text) {
             // console.log("Gelen veri:", text);
             var resultValue = document.getElementById('resultText').value;
             alert(resultValue);
             CKEDITOR.instances['metinAlani'].insertHtml("<p>" + resultValue + "</p>");
+        }
+        function editText(textName) {
+        // yapacam bir şeyler
+        document.getElementById("textName").value=textName;
+        CKEDITOR.instances['metinAlani'].setData(textName);
         }
     </script>
 </body>

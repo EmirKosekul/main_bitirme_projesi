@@ -196,3 +196,12 @@ textarea[name='gosterilenMetin'] {
     cursor: pointer;
     border-radius: 5px;
 }
+
+.edit-button {
+    background-color: #00ff2f;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
