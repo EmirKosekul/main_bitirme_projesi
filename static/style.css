@@ -405,3 +405,25 @@ textarea[name='gosterilenMetin'] {
     opacity: .65;
     pointer-events: none;
 }
+
+#loading-circle {
+    border: 5px solid #f3f3f3; /* Gri sınır */
+    border-top: 5px solid #3498db; /* Mavi sınır */
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite; /* Dönme animasyonu */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -15px; /* Yükseklik / 2 */
+    margin-left: -15px; /* Genişlik / 2 */
+    z-index: 9999; /* Diğer öğelerin üstünde görüntüleme */
+    display: none; /* Başlangıçta gizli */
+}
+
+/* Dönme animasyonu */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

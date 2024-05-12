@@ -31,6 +31,8 @@
 </head>
 
 <body>
+    <div id="loading-circle"></div>
+
     <div class="dropdown">
         <button onclick="myFunction()" class="dropbtn">Kayıtlı Metinlerim</button>
         <div id="myDropdown" class="dropdown-content">
@@ -49,7 +51,8 @@
 
     <form method="post" onsubmit="return validateForm()">
         <div class="mainTextDiv">
-            <input class="submitInput" type="text" name="text_name" id="textName" placeholder="Metin Adı" value="{{text_name}}">
+            <input class="submitInput" type="text" name="text_name" id="textName" placeholder="Metin Adı"
+                value="{{text_name}}">
             <button class="kaydetBtn" type="submit" name="action" value="kayit">Kaydet</button>
             <textarea class="mainTextArea" id="metinAlani" name="metinAlani" rows="4" cols="50">{{main_text}}</textarea>
             <script>
@@ -153,11 +156,26 @@
                             editor.addCommand('paraphrase', {
                                 exec: function (editor) {
                                     document.querySelector("button[value='sixth_action']").click();
+                                    document.getElementById('loading-circle').style.display = 'block';
                                 }
                             });
                             editor.addCommand('grammarCorrection', {
                                 exec: function (editor) {
                                     document.querySelector("button[value='seventh_action']").click();
+                                    // Döner yüklenme çemberini göster
+                                    document.getElementById('loading-circle').style.display = 'block';
+
+                                    // // grammarCorrection işlemini gerçekleştir
+                                    // grammar(selected_text)[0]['generated_text'].then(function (result) {
+                                    //     // İşlem tamamlandığında, sonucu işle ve ekranda göster
+                                    //     document.getElementById('loading-circle').style.display = 'none'; // Yüklenme çemberini gizle
+                                    //     document.getElementById('resultText').value = result;
+                                    // }).catch(function (error) {
+                                    //     // Hata durumunda işlemleri burada ele alabilirsiniz
+                                    //     console.error('Bir hata oluştu:', error);
+                                    //     document.getElementById('loading-circle').style.display = 'none'; // Yüklenme çemberini gizle
+                                    //     alert('İşlem sırasında bir hata oluştu. Lütfen tekrar deneyin.');
+                                    // });
                                 }
                             });
                             editor.addCommand('translateCommand', {
