@@ -14,7 +14,8 @@ nltk.download('punkt')
 # keyword = pipeline("text2text-generation", model="beogradjanka/bart_finetuned_keyphrase_extraction")
 # paraphrase = pipeline("text2text-generation", model="humarin/chatgpt_paraphraser_on_T5_base")
 #grammar= pipeline("text2text-generation", model="vennify/t5-base-grammar-correction")
-engToTr = pipeline("translation", model="Helsinki-NLP/opus-tatoeba-en-tr")
+# engToTr = pipeline("translation", model="Helsinki-NLP/opus-tatoeba-en-tr")
+# trToEng = pipeline("translation", model="Helsinki-NLP/opus-mt-tc-big-tr-en")
 
 
 app = Flask(__name__)
@@ -228,14 +229,28 @@ def profile():
          texts = user.get('texts', [])
          text_name = request.form['text_name']
          header="English to Turkish Translate"
-         sentences = split_paragraph_to_sentences(selected_text)   
-         for sentence in sentences:
-          corrected_sentence = engToTr(sentence,max_new_tokens=50) # Her bir cümleyi işleyip düzeltme işlemi
-          corrected_sentences.append(corrected_sentence)
-         corrected_paragraph = join_sentences_to_paragraph_translate(corrected_sentences)
-         result=corrected_paragraph
-         corrected_sentences.clear()         
-        #  result=selected_text + " 7 işlem"
+        #  sentences = split_paragraph_to_sentences(selected_text)   
+        #  for sentence in sentences:
+        #   corrected_sentence = engToTr(sentence,max_new_tokens=50) # Her bir cümleyi işleyip düzeltme işlemi
+        #   corrected_sentences.append(corrected_sentence)
+        #  corrected_paragraph = join_sentences_to_paragraph_translate(corrected_sentences)
+        #  result=corrected_paragraph
+        #  corrected_sentences.clear()         
+         result=selected_text + " 8 işlem"
+         return render_template('rightclick.html', selected_text=selected_text,main_text=main_text ,result=result, header=header,username=username, texts=texts,text_name=text_name)
+     elif request.form['action'] == 'ninth_action':
+         user = users_collection.find_one({'username': username})
+         texts = user.get('texts', [])
+         text_name = request.form['text_name']
+         header="Turkish to English Translate"
+        #  sentences = split_paragraph_to_sentences(selected_text)   
+        #  for sentence in sentences:
+        #   corrected_sentence = trToEng(sentence,max_new_tokens=50) # Her bir cümleyi işleyip düzeltme işlemi
+        #   corrected_sentences.append(corrected_sentence)
+        #  corrected_paragraph = join_sentences_to_paragraph_translate(corrected_sentences)
+        #  result=corrected_paragraph
+        #  corrected_sentences.clear()         
+         result=selected_text + " 9 işlem"
          return render_template('rightclick.html', selected_text=selected_text,main_text=main_text ,result=result, header=header,username=username, texts=texts,text_name=text_name)
      
     # Kullanıcı ile ilişkilendirilmiş metinleri veritabanından al

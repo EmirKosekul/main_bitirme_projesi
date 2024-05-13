@@ -76,14 +76,14 @@
                                     group: 'customGroup',
                                 }
                             );
-                            editor.addMenuItem('customItem4',
+                            editor.addMenuItem('customItem8',
                                 {
                                     label: 'Get a Title',
                                     command: 'getTitle',
                                     group: 'customGroup',
                                 }
                             );
-                            editor.addMenuItem('customItem5',
+                            editor.addMenuItem('customItem9',
                                 {
                                     label: 'Spelling Correction',
                                     command: 'spellingCorrection',
@@ -128,10 +128,17 @@
                                     return items;
                                 }
                             });
-                            editor.addMenuItem('customItem8',
+                            editor.addMenuItem('customItem4',
                                 {
-                                    label: '   English to Turkish',
+                                    label:'•  English to Turkish',
                                     command: 'englishToTurkish',
+                                    group: 'customGroup',
+                                }
+                            );
+                            editor.addMenuItem('customItem5',
+                                {
+                                    label:'•  Turkish to English',
+                                    command: 'turkishToEnglish',
                                     group: 'customGroup',
                                 }
                             );
@@ -196,6 +203,12 @@
                                     document.getElementById('loading-circle').style.display = 'block';
                                 }
                             });
+                            editor.addCommand('turkishToEnglish', {
+                                exec: function (editor) {
+                                    document.querySelector("button[value='ninth_action']").click();
+                                    document.getElementById('loading-circle').style.display = 'block';
+                                }
+                            });
                             editor.addCommand('translateCommand', {
                                 exec: function (editor) {
                                     console.log('Translate command executed');
@@ -223,6 +236,7 @@
                                 items['customItem7'] = CKEDITOR.TRISTATE_OFF;
                                 items['customItem8'] = CKEDITOR.TRISTATE_OFF;
                                 items['customItem9'] = CKEDITOR.TRISTATE_OFF;
+                                items['customItem10'] = CKEDITOR.TRISTATE_OFF;
                                 return items;
                             });
                         }
@@ -255,6 +269,7 @@
             <button class="actionButton" type="submit" name="action" value="sixth_action">Paraphrase</button>
             <button class="actionButton" type="submit" name="action" value="seventh_action">Grammar Correction</button>
             <button class="actionButton" type="submit" name="action" value="eighth_action">English to Turkish</button>
+            <button class="actionButton" type="submit" name="action" value="ninth_action">Turkish to English</button>
             <label class="headerLabel">{{header}}</label>
             <textarea class="answerTextArea" id="resultText">{{ result }}</textarea>
             <button class="aktarBtn" type="button" onclick="insertTextHere('Emir\'in Ayakkabıları')"> Transfer </button>
