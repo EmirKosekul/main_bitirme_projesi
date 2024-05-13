@@ -131,26 +131,31 @@
                             editor.addCommand('getSummary', {
                                 exec: function (editor) {
                                     document.querySelector("button[value='first_action']").click();
+                                    document.getElementById('loading-circle').style.display = 'block';
                                 }
                             });
                             editor.addCommand('getQuestion', {
                                 exec: function (editor) {
                                     document.querySelector("button[value='second_action']").click();
+                                    document.getElementById('loading-circle').style.display = 'block';
                                 }
                             });
                             editor.addCommand('getTitle', {
                                 exec: function (editor) {
                                     document.querySelector("button[value='third_action']").click();
+                                    document.getElementById('loading-circle').style.display = 'block';
                                 }
                             });
                             editor.addCommand('spellingCorrection', {
                                 exec: function (editor) {
                                     document.querySelector("button[value='fourth_action']").click();
+                                    document.getElementById('loading-circle').style.display = 'block';
                                 }
                             });
                             editor.addCommand('keyWord', {
                                 exec: function (editor) {
                                     document.querySelector("button[value='fifth_action']").click();
+                                    document.getElementById('loading-circle').style.display = 'block';
                                 }
                             });
                             editor.addCommand('paraphrase', {
