@@ -408,7 +408,7 @@ textarea[name='gosterilenMetin'] {
 
 #loading-circle {
     border: 5px solid #f3f3f3; /* Gri sınır */
-    border-top: 5px solid #3498db; /* Mavi sınır */
+    border-top: 5px solid #ff0000; /* Mavi sınır */
     border-radius: 50%;
     width: 30px;
     height: 30px;

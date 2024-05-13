@@ -128,6 +128,13 @@
                                     return items;
                                 }
                             });
+                            editor.addMenuItem('customItem8',
+                                {
+                                    label: '   English to Turkish',
+                                    command: 'englishToTurkish',
+                                    group: 'customGroup',
+                                }
+                            );
                             editor.addCommand('getSummary', {
                                 exec: function (editor) {
                                     document.querySelector("button[value='first_action']").click();
@@ -183,6 +190,12 @@
                                     // });
                                 }
                             });
+                            editor.addCommand('englishToTurkish', {
+                                exec: function (editor) {
+                                    document.querySelector("button[value='eighth_action']").click();
+                                    document.getElementById('loading-circle').style.display = 'block';
+                                }
+                            });
                             editor.addCommand('translateCommand', {
                                 exec: function (editor) {
                                     console.log('Translate command executed');
@@ -209,6 +222,7 @@
                                 items['customItem6'] = CKEDITOR.TRISTATE_OFF;
                                 items['customItem7'] = CKEDITOR.TRISTATE_OFF;
                                 items['customItem8'] = CKEDITOR.TRISTATE_OFF;
+                                items['customItem9'] = CKEDITOR.TRISTATE_OFF;
                                 return items;
                             });
                         }
@@ -240,6 +254,7 @@
             <button class="actionButton" type="submit" name="action" value="fifth_action">Key Word</button>
             <button class="actionButton" type="submit" name="action" value="sixth_action">Paraphrase</button>
             <button class="actionButton" type="submit" name="action" value="seventh_action">Grammar Correction</button>
+            <button class="actionButton" type="submit" name="action" value="eighth_action">English to Turkish</button>
             <label class="headerLabel">{{header}}</label>
             <textarea class="answerTextArea" id="resultText">{{ result }}</textarea>
             <button class="aktarBtn" type="button" onclick="insertTextHere('Emir\'in Ayakkabıları')"> Transfer </button>
@@ -265,14 +280,14 @@
         function insertTextHere(text) {
             // console.log("Gelen veri:", text);
             var resultValue = document.getElementById('resultText').value;
-            alert(resultValue);
+            // alert(resultValue);
             CKEDITOR.instances['metinAlani'].insertHtml("<p>" + resultValue + "</p>");
         }
-        function editText(textName) {
-            // yapacam bir şeyler
-            document.getElementById("textName").value = textName;
-            CKEDITOR.instances['metinAlani'].setData(textName);
-        }
+        // function editText(textName) {
+        //     // yapacam bir şeyler
+        //     document.getElementById("textName").value = textName;
+        //     CKEDITOR.instances['metinAlani'].setData(textName);
+        // }
         function validateForm() {
             var action = document.activeElement.value; // Hangi düğmeye basıldığını al
             if (action === "kayit") {
