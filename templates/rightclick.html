@@ -39,7 +39,8 @@
             {% for text in texts %}
             <div class="text-item">
                 <a href="#" onclick="showText('{{ text.content }}', '{{ text.name }}')">{{ text.name }}</a>
-                <form action="/delete_text" method="post" class="delete-form">
+                <form action="/delete_text" method="post" class="delete-form"
+                    onsubmit="return confirmDelete('{{ text.name }}')">
                     <input type="hidden" name="text_name" value="{{ text.name }}">
                     <button type="submit" class="delete-button">Sil</button>
                 </form>
@@ -130,14 +131,14 @@
                             });
                             editor.addMenuItem('customItem4',
                                 {
-                                    label:'•  English to Turkish',
+                                    label: '•  English to Turkish',
                                     command: 'englishToTurkish',
                                     group: 'customGroup',
                                 }
                             );
                             editor.addMenuItem('customItem5',
                                 {
-                                    label:'•  Turkish to English',
+                                    label: '•  Turkish to English',
                                     command: 'turkishToEnglish',
                                     group: 'customGroup',
                                 }
@@ -320,6 +321,10 @@
             }
             // Diğer düğmelere basıldığında doğrudan formun gönderilmesine izin ver
             return true;
+        }
+        function confirmDelete(text) {
+            var result = confirm(text + " adlı metni silmek istediğinize emin misiniz?");
+            return result
         }
 
     </script>
