@@ -32,7 +32,6 @@
 
 <body>
     <div id="loading-circle"></div>
-
     <div class="dropdown">
         <button onclick="myFunction()" class="dropbtn">Kayıtlı Metinlerim</button>
         <div id="myDropdown" class="dropdown-content">
@@ -277,7 +276,7 @@
         </div>
     </form>
 
-    <a href="/logout">Çıkış Yap</a>
+    <button type="button" class="logoutBtn" onclick="logout()">Çıkış Yap</button>
 
     <!-- Özel menü -->
     <div id="ozelMenu">
@@ -325,6 +324,9 @@
         function confirmDelete(text) {
             var result = confirm(text + " adlı metni silmek istediğinize emin misiniz?");
             return result
+        }
+        function logout() {
+            window.location.href = "/logout";
         }
 
     </script>

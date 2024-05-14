@@ -13,7 +13,7 @@ nltk.download('punkt')
 #spelling_correction = pipeline("text2text-generation", model="oliverguhr/spelling-correction-english-base")
 # keyword = pipeline("text2text-generation", model="beogradjanka/bart_finetuned_keyphrase_extraction")
 # paraphrase = pipeline("text2text-generation", model="humarin/chatgpt_paraphraser_on_T5_base")
-#grammar= pipeline("text2text-generation", model="vennify/t5-base-grammar-correction")
+grammar= pipeline("text2text-generation", model="vennify/t5-base-grammar-correction")
 # engToTr = pipeline("translation", model="Helsinki-NLP/opus-tatoeba-en-tr")
 # trToEng = pipeline("translation", model="Helsinki-NLP/opus-mt-tc-big-tr-en")
 
@@ -214,15 +214,15 @@ def profile():
          texts = user.get('texts', [])
          text_name = request.form['text_name']
          header="Grammar Correction"
-        #  sentences = split_paragraph_to_sentences(selected_text)   
-        #  for sentence in sentences:
-        #   corrected_sentence = grammar(sentence,max_new_tokens=50)[0]['generated_text'] # Her bir cümleyi işleyip düzeltme işlemi
-        #   corrected_sentences.append(corrected_sentence)
-        #  corrected_paragraph = join_sentences_to_paragraph(corrected_sentences)
-        #  result=corrected_paragraph
-        #  corrected_sentences.clear()         
+         sentences = split_paragraph_to_sentences(selected_text)   
+         for sentence in sentences:
+          corrected_sentence = grammar(sentence,max_new_tokens=50)[0]['generated_text'] # Her bir cümleyi işleyip düzeltme işlemi
+          corrected_sentences.append(corrected_sentence)
+         corrected_paragraph = join_sentences_to_paragraph(corrected_sentences)
+         result=corrected_paragraph
+         corrected_sentences.clear()         
         #  result = grammar(selected_text)[0]['generated_text']
-         result=selected_text + " 7 işlem"
+        #  result=selected_text + " 7 işlem"
          return render_template('rightclick.html', selected_text=selected_text,main_text=main_text ,result=result, header=header,username=username, texts=texts,text_name=text_name)
      elif request.form['action'] == 'eighth_action':
          user = users_collection.find_one({'username': username})
