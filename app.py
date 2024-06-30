@@ -7,15 +7,15 @@ import random
 import nltk
 nltk.download('punkt')
 
-summarizer = pipeline("summarization", model="Falconsai/text_summarization")
+# summarizer = pipeline("summarization", model="Falconsai/text_summarization")
 question_generator = pipeline("text2text-generation", model="iarfmoose/t5-base-question-generator")
 title_generator = pipeline("text2text-generation", model="czearing/article-title-generator")
-spelling_correction = pipeline("text2text-generation", model="oliverguhr/spelling-correction-english-base")
-keyword = pipeline("text2text-generation", model="beogradjanka/bart_finetuned_keyphrase_extraction")
-paraphrase = pipeline("text2text-generation", model="humarin/chatgpt_paraphraser_on_T5_base")
-grammar= pipeline("text2text-generation", model="vennify/t5-base-grammar-correction")
-engToTr = pipeline("translation", model="Helsinki-NLP/opus-tatoeba-en-tr")
-trToEng = pipeline("translation", model="Helsinki-NLP/opus-mt-tc-big-tr-en")
+# spelling_correction = pipeline("text2text-generation", model="oliverguhr/spelling-correction-english-base")
+# keyword = pipeline("text2text-generation", model="beogradjanka/bart_finetuned_keyphrase_extraction")
+# paraphrase = pipeline("text2text-generation", model="humarin/chatgpt_paraphraser_on_T5_base")
+# grammar= pipeline("text2text-generation", model="vennify/t5-base-grammar-correction")
+# engToTr = pipeline("translation", model="Helsinki-NLP/opus-tatoeba-en-tr")
+# trToEng = pipeline("translation", model="Helsinki-NLP/opus-mt-tc-big-tr-en")
 
 
 app = Flask(__name__)
@@ -56,7 +56,8 @@ def register():
 
     existing_user = users_collection.find_one({'username': username})
     if existing_user:
-        return jsonify({'error': 'Kullanıcı zaten mevcut!'})
+        # return jsonify({'error': 'Kullanıcı zaten mevcut!'})
+        return render_template('index.html', register_error='Kullanıcı zaten mevcut!')
 
     hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
     users_collection.insert_one({'username': username, 'password': hashed_password})
@@ -74,7 +75,8 @@ def login():
         session['username'] = username
         return redirect(url_for('profile'))
     else:
-        return jsonify({'error': 'Geçersiz kullanıcı adı veya şifre!'})
+        # return jsonify({'error': 'Geçersiz kullanıcı adı veya şifre!'})
+        return render_template('index.html', login_error='Geçersiz kullanıcı adı veya şifre!')
 
 @app.route('/logout')
 def logout():
@@ -145,8 +147,8 @@ def profile():
          texts = user.get('texts', [])
          text_name = request.form['text_name']
          header="Your summary is here!"
-         result=summarizer(selected_text, max_length=1000, min_length=30, do_sample=False)[0]['summary_text']
-        #  result=selected_text + " İlk işlem"
+        #  result=summarizer(selected_text, max_length=1000, min_length=30, do_sample=False)[0]['summary_text']
+         result=selected_text + " İlk işlem"
          print("ben tıklandım")
          return render_template('rightclick.html', selected_text=selected_text,main_text=main_text ,result=result, header=header,username=username, texts=texts,text_name=text_name)
      elif request.form['action'] == 'second_action':
@@ -176,81 +178,81 @@ def profile():
          texts = user.get('texts', [])
          text_name = request.form['text_name']
          header="Spelling Correction"
-         sentences = split_paragraph_to_sentences(selected_text) 
-         for sentence in sentences:
-          corrected_sentence = spelling_correction(sentence,max_new_tokens=50)[0]['generated_text'] # Her bir cümleyi işleyip düzeltme işlemi
-          corrected_sentences.append(corrected_sentence)
-         corrected_paragraph = join_sentences_to_paragraph(corrected_sentences)
-         result=corrected_paragraph
-         corrected_sentences.clear()
-         result = spelling_correction(selected_text)[0]['generated_text']
-        #  result=selected_text + " 4 işlem"
+        #  sentences = split_paragraph_to_sentences(selected_text) 
+        #  for sentence in sentences:
+        #   corrected_sentence = spelling_correction(sentence,max_new_tokens=50)[0]['generated_text'] # Her bir cümleyi işleyip düzeltme işlemi
+        #   corrected_sentences.append(corrected_sentence)
+        #  corrected_paragraph = join_sentences_to_paragraph(corrected_sentences)
+        #  result=corrected_paragraph
+        #  corrected_sentences.clear()
+        #  result = spelling_correction(selected_text)[0]['generated_text']
+         result=selected_text + " 4 işlem"
          return render_template('rightclick.html', selected_text=selected_text,main_text=main_text ,result=result, header=header,username=username, texts=texts,text_name=text_name)
      elif request.form['action'] == 'fifth_action':
          user = users_collection.find_one({'username': username})
          texts = user.get('texts', [])
          text_name = request.form['text_name']
          header="Key Word"         
-         result = keyword(selected_text)[0]['generated_text']
-        #  result=selected_text + " 5 işlem"
+        #  result = keyword(selected_text)[0]['generated_text']
+         result=selected_text + " 5 işlem"
          return render_template('rightclick.html', selected_text=selected_text,main_text=main_text ,result=result, header=header,username=username, texts=texts,text_name=text_name)
      elif request.form['action'] == 'sixth_action':
          user = users_collection.find_one({'username': username})
          texts = user.get('texts', [])
          text_name = request.form['text_name']
          header="Paraphrase"
-         sentences = split_paragraph_to_sentences(selected_text)   
-         for sentence in sentences:
-          corrected_sentence = paraphrase(sentence,max_new_tokens=100)[0]['generated_text'] # Her bir cümleyi işleyip düzeltme işlemi
-          corrected_sentences.append(corrected_sentence)
-         corrected_paragraph = join_sentences_to_paragraph(corrected_sentences)
-         result=corrected_paragraph
-         corrected_sentences.clear()         
-         result = paraphrase(selected_text)[0]['generated_text']
-        #  result=selected_text + " 6 işlem"
+        #  sentences = split_paragraph_to_sentences(selected_text)   
+        #  for sentence in sentences:
+        #   corrected_sentence = paraphrase(sentence,max_new_tokens=100)[0]['generated_text'] # Her bir cümleyi işleyip düzeltme işlemi
+        #   corrected_sentences.append(corrected_sentence)
+        #  corrected_paragraph = join_sentences_to_paragraph(corrected_sentences)
+        #  result=corrected_paragraph
+        #  corrected_sentences.clear()         
+        #  result = paraphrase(selected_text)[0]['generated_text']
+         result=selected_text + " 6 işlem"
          return render_template('rightclick.html', selected_text=selected_text,main_text=main_text ,result=result, header=header,username=username, texts=texts,text_name=text_name)
      elif request.form['action'] == 'seventh_action':
          user = users_collection.find_one({'username': username})
          texts = user.get('texts', [])
          text_name = request.form['text_name']
          header="Grammar Correction"
-         sentences = split_paragraph_to_sentences(selected_text)   
-         for sentence in sentences:
-          corrected_sentence = grammar(sentence,max_new_tokens=50)[0]['generated_text'] # Her bir cümleyi işleyip düzeltme işlemi
-          corrected_sentences.append(corrected_sentence)
-         corrected_paragraph = join_sentences_to_paragraph(corrected_sentences)
-         result=corrected_paragraph
-         corrected_sentences.clear()         
-        #  result = grammar(selected_text)[0]['generated_text']
-        #  result=selected_text + " 7 işlem"
+        #  sentences = split_paragraph_to_sentences(selected_text)   
+        #  for sentence in sentences:
+        #   corrected_sentence = grammar(sentence,max_new_tokens=50)[0]['generated_text'] # Her bir cümleyi işleyip düzeltme işlemi
+        #   corrected_sentences.append(corrected_sentence)
+        #  corrected_paragraph = join_sentences_to_paragraph(corrected_sentences)
+        #  result=corrected_paragraph
+        #  corrected_sentences.clear()         
+        ##  result = grammar(selected_text)[0]['generated_text']
+         result=selected_text + " 7 işlem"
          return render_template('rightclick.html', selected_text=selected_text,main_text=main_text ,result=result, header=header,username=username, texts=texts,text_name=text_name)
      elif request.form['action'] == 'eighth_action':
          user = users_collection.find_one({'username': username})
          texts = user.get('texts', [])
          text_name = request.form['text_name']
          header="English to Turkish Translate"
-         sentences = split_paragraph_to_sentences(selected_text)   
-         for sentence in sentences:
-          corrected_sentence = engToTr(sentence,max_new_tokens=50) # Her bir cümleyi işleyip düzeltme işlemi
-          corrected_sentences.append(corrected_sentence)
-         corrected_paragraph = join_sentences_to_paragraph_translate(corrected_sentences)
-         result=corrected_paragraph
-         corrected_sentences.clear()         
-        #  result=selected_text + " 8 işlem"
+        #  sentences = split_paragraph_to_sentences(selected_text)   
+        #  for sentence in sentences:
+        #   corrected_sentence = engToTr(sentence,max_new_tokens=50) # Her bir cümleyi işleyip düzeltme işlemi
+        #   corrected_sentences.append(corrected_sentence)
+        #  corrected_paragraph = join_sentences_to_paragraph_translate(corrected_sentences)
+        #  result=corrected_paragraph
+        #  corrected_sentences.clear()         
+         result=selected_text + " 8 işlem"
          return render_template('rightclick.html', selected_text=selected_text,main_text=main_text ,result=result, header=header,username=username, texts=texts,text_name=text_name)
      elif request.form['action'] == 'ninth_action':
          user = users_collection.find_one({'username': username})
          texts = user.get('texts', [])
          text_name = request.form['text_name']
          header="Turkish to English Translate"
-         sentences = split_paragraph_to_sentences(selected_text)   
-         for sentence in sentences:
-          corrected_sentence = trToEng(sentence,max_new_tokens=50) # Her bir cümleyi işleyip düzeltme işlemi
-          corrected_sentences.append(corrected_sentence)
-         corrected_paragraph = join_sentences_to_paragraph_translate(corrected_sentences)
-         result=corrected_paragraph
-         corrected_sentences.clear()         
-        #  result=selected_text + " 9 işlem"
+        #  sentences = split_paragraph_to_sentences(selected_text)   
+        #  for sentence in sentences:
+        #   corrected_sentence = trToEng(sentence,max_new_tokens=50) # Her bir cümleyi işleyip düzeltme işlemi
+        #   corrected_sentences.append(corrected_sentence)
+        #  corrected_paragraph = join_sentences_to_paragraph_translate(corrected_sentences)
+        #  result=corrected_paragraph
+        #  corrected_sentences.clear()         
+         result=selected_text + " 9 işlem"
          return render_template('rightclick.html', selected_text=selected_text,main_text=main_text ,result=result, header=header,username=username, texts=texts,text_name=text_name)
      
     # Kullanıcı ile ilişkilendirilmiş metinleri veritabanından al

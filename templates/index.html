@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flask Login/Register</title>
+    <title>Kayıt Ol & Giriş Yap </title>
     <link rel="stylesheet" href="/static/LoginPageStyle.css">
 </head>
 <body>
@@ -14,11 +14,20 @@
         <button type="submit">Giriş</button>
     </form>
 
+    {% if login_error %}
+        <p style="color: red;">{{ login_error }}</p>
+    {% endif %}
+
     <h2>Kayıt Ol</h2>
     <form action="/register" method="post">
         <input type="text" name="username" placeholder="Kullanıcı Adı" required>
         <input type="password" name="password" placeholder="Şifre" required>
         <button type="submit">Kayıt Ol</button>
     </form>
+
+    {% if register_error %}
+        <p style="color: red;">{{ register_error }}</p>
+    {% endif %}
+
 </body>
 </html>
